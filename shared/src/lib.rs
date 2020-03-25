@@ -12,14 +12,13 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 /// Run all pending migrations in the given list. Apps should likely be calling
-pub async fn run_migrations<List>(
+pub async fn run_migrations<T>(
     pool: DbConnectionPool,
-    migrations: List,
+    migrations: Vec<T>,
     output: &mut (dyn Write + Send + Sync),
 ) -> Result<(), Error>
 where
-    List: IntoIterator,
-    List::Item: Migration + Send + Sync,
+    T: Migration + Send + Sync,
 {
     let runner = MigrationsRunner::from_pool(pool.clone());
     runner.setup_database().await?;
