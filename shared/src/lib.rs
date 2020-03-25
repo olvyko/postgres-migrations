@@ -12,7 +12,11 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 /// Run all pending migrations in the given list. Apps should likely be calling
-pub async fn run_migrations<List>(pool: DbConnectionPool, migrations: List, output: &mut dyn Write) -> Result<(), Error>
+pub async fn run_migrations<List>(
+    pool: DbConnectionPool,
+    migrations: List,
+    output: &mut (dyn Write + Send + Sync),
+) -> Result<(), Error>
 where
     List: IntoIterator,
     List::Item: Migration + Send + Sync,
@@ -35,7 +39,7 @@ where
 pub async fn run_migration(
     runner: &MigrationsRunner,
     migration: &(dyn Migration + Send + Sync),
-    output: &mut dyn Write,
+    output: &mut (dyn Write + Send + Sync),
 ) -> Result<(), Error> {
     let mut conn = runner.get_pooled_conn().await?;
     let transaction = conn.transaction().await?;
@@ -54,7 +58,7 @@ pub async fn run_migration(
 pub async fn revert_migration(
     runner: &MigrationsRunner,
     migration: &(dyn Migration + Send + Sync),
-    output: &mut dyn Write,
+    output: &mut (dyn Write + Send + Sync),
 ) -> Result<(), Error> {
     let mut conn = runner.get_pooled_conn().await?;
     let transaction = conn.transaction().await?;

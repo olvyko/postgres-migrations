@@ -53,7 +53,10 @@ pub fn derive_embed_migrations(input: &syn::DeriveInput) -> proc_macro2::TokenSt
             run_with_output(pool, &mut io::sink()).await
         }
 
-        pub async fn run_with_output(pool: DbConnectionPool, out: &mut io::Write) -> Result<(), RunMigrationsError> {
+        pub async fn run_with_output(
+            pool: DbConnectionPool,
+            out: &mut (dyn io::Write + Send + Sync),
+        ) -> Result<(), RunMigrationsError> {
             run_migrations(pool, ALL_MIGRATIONS.iter().map(|v| *v), out).await
         }
     );

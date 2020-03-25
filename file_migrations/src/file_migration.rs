@@ -1,9 +1,9 @@
-use shared::runner::*;
+use shared::async_trait;
 use shared::error::*;
 use shared::migration::*;
 use shared::run_migrations;
-use shared::async_trait;
-use std::fs::{File};
+use shared::runner::*;
+use std::fs::File;
 use std::io::{stdout, Read, Write};
 use std::path::{Path, PathBuf};
 
@@ -26,7 +26,7 @@ pub async fn run_pending_migrations(pool: DbConnectionPool) -> Result<(), Error>
 pub async fn run_pending_migrations_in_directory(
     pool: DbConnectionPool,
     migrations_dir: &Path,
-    output: &mut dyn Write,
+    output: &mut (dyn Write + Send + Sync),
 ) -> Result<(), Error> {
     let all_migrations = migrations_in_directory(migrations_dir)?;
     run_migrations(pool, all_migrations, output).await
