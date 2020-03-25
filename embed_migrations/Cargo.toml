@@ -1,0 +1,15 @@
+[package]
+name = "embed_migrations"
+version = "0.1.0"
+authors = ["olvyko <olvyko@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+shared = { path = "../shared" }
+
+syn = { version = "1", features = ["extra-traits"] }
+quote = "1"
+proc-macro2 = "1"
+
+[lib]
+proc-macro = true

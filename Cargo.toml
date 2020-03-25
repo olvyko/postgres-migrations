@@ -1,0 +1,35 @@
+[package]
+name = "postgres-migrations"
+version = "0.1.0"
+authors = ["olvyko <olvyko@gmail.com>"]
+edition = "2018"
+exclude = ["examples/*"]
+
+[dependencies]
+shared = { path = "shared" }
+embed_migrations = { path = "embed_migrations" }
+file_migrations = { path = "file_migrations" }
+# embed_migrations = { path = "embed_migrations", optional = true }
+# file_migrations = { path = "file_migrations", optional = true }
+
+# [features]
+# default = ["embedded", "files"]
+
+# embedded = ["embed_migrations"]
+# files = ["file_migrations"]
+
+[dev-dependencies]
+tokio = { version = "0.2.11", features = ["full"] }
+tokio-postgres = "0.5.1"
+bb8-postgres = "0.4.0"
+
+[workspace]
+members = [
+    "shared",
+    "embed_migrations",
+    "file_migrations",
+]
+
+[[example]]
+name = "embed_migrations"
+path = "examples/embed_migrations/main.rs"

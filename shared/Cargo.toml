@@ -1,0 +1,12 @@
+[package]
+name = "shared"
+version = "0.1.0"
+authors = ["olvyko <olvyko@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+async-trait = "0.1.26"
+tokio-postgres = "0.5.1"
+bb8-postgres = "0.4.0"
+thiserror = "1.0.11"
+log = "0.4.8"
