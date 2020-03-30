@@ -6,7 +6,7 @@ edition = "2018"
 exclude = ["examples/*"]
 
 [dependencies]
-shared = { path = "shared" }
+migrations_shared = { path = "migrations_shared" }
 embed_migrations = { path = "embed_migrations" }
 file_migrations = { path = "file_migrations" }
 # embed_migrations = { path = "embed_migrations", optional = true }
@@ -25,7 +25,7 @@ bb8-postgres = "0.4.0"
 
 [workspace]
 members = [
-    "shared",
+    "migrations_shared",
     "embed_migrations",
     "file_migrations",
 ]

@@ -1,7 +1,7 @@
 pub use embed_migrations::*;
 pub use file_migrations::*;
 
-pub use shared::*;
+pub use migrations_shared::*;
 
 #[macro_export]
 /// This macro will read your migrations at compile time, and embed a module you can use to execute

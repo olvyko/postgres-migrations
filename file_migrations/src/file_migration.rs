@@ -1,8 +1,8 @@
-use shared::async_trait;
-use shared::error::*;
-use shared::migration::*;
-use shared::run_migrations;
-use shared::runner::*;
+use migrations_shared::async_trait;
+use migrations_shared::error::*;
+use migrations_shared::migration::*;
+use migrations_shared::run_migrations;
+use migrations_shared::runner::*;
 use std::fs::File;
 use std::io::{stdout, Read, Write};
 use std::path::{Path, PathBuf};
@@ -18,7 +18,7 @@ use std::path::{Path, PathBuf};
 /// a branch. Whoever created the second one will eventually need to run the first when both
 /// branches are merged.
 pub async fn run_pending_migrations(pool: DbConnectionPool) -> Result<(), Error> {
-    let migrations_dir = shared::find_migrations_directory()?;
+    let migrations_dir = migrations_shared::find_migrations_directory()?;
     run_pending_migrations_in_directory(pool, &migrations_dir, &mut stdout()).await
 }
 
@@ -33,7 +33,7 @@ pub async fn run_pending_migrations_in_directory(
 }
 
 fn migrations_in_directory(path: &Path) -> Result<Vec<Box<dyn Migration + Send + Sync>>, Error> {
-    shared::migration_paths_in_directory(path)?
+    migrations_shared::migration_paths_in_directory(path)?
         .iter()
         .map(|e| migration_from(e.path()))
         .collect()
@@ -41,7 +41,7 @@ fn migrations_in_directory(path: &Path) -> Result<Vec<Box<dyn Migration + Send +
 
 pub fn migration_from(path: PathBuf) -> Result<Box<dyn Migration + Send + Sync>, Error> {
     if valid_sql_migration_directory(&path) {
-        let version = shared::version_from_path(&path)?;
+        let version = migrations_shared::version_from_path(&path)?;
         Ok(Box::new(SqlFileMigration(path, version)))
     } else {
         Err(Error::UnknownMigrationFormat(path))
